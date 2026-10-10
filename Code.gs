@@ -9,6 +9,7 @@ const COLLEGE_VALID_HOUSES = [
   "Shariatullah House"
 ];
 const COLLEGE_VALID_FORMS = ["A", "B"];
+const COLLEGE_VALID_MISSION_OBJECTIVES = ["হ্যাঁ", "না", "অন্যান্য"];
 const COLLEGE_RATING_FIELDS = [
   {key: "environmentRating", header: "College Environment Rating"},
   {key: "educationDevelopmentRating", header: "Education Development Measures Rating"},
@@ -105,6 +106,7 @@ function collegeSaveSubmission(spreadsheet, submission) {
       submission.answers.ratings[field.key],
       collegeSafeCellText(submission.answers.comments[field.key])
     ]),
+    collegeSafeCellText(submission.answers.missionObjective),
     collegeSafeCellText(submission.answers.missionDescription),
     collegeSafeCellText(submission.answers.managementComment)
   ];
@@ -152,7 +154,7 @@ function collegeBuildHeaders() {
     "Cadet Number"
   ];
   COLLEGE_RATING_FIELDS.forEach(field => headers.push(field.header, `${field.header} Comment`));
-  headers.push("College Mission or Purpose", "College Management Comment");
+  headers.push("College Mission Objective", "College Mission or Purpose", "College Management Comment");
   return headers;
 }
 
@@ -172,6 +174,7 @@ function collegeMigrateOrValidateHeaders(sheet, headers) {
 
   const basicHeaders = ["No", "Submit on", "Class", "House", "Form", "Cadet Name", "Cadet Number"];
   const hasBasicHeaders = basicHeaders.every((header, index) => oldHeaders[index] === header);
+  const objectiveIndex = oldHeaders.indexOf("College Mission Objective");
   const missionIndex = oldHeaders.indexOf("College Mission or Purpose");
   const managementCommentIndex = oldHeaders.indexOf("College Management Comment");
   const knownRatingHeaders = new Set([
@@ -185,9 +188,10 @@ function collegeMigrateOrValidateHeaders(sheet, headers) {
     "Hospital Facilities and Environment Rating",
     "College Adjutant Sincerity Rating"
   ]);
+  const ratingRangeEnd = missionIndex >= 0 ? missionIndex : oldHeaders.length;
   const ratingHeadersAreValid = oldHeaders
-    .slice(basicHeaders.length, missionIndex < 0 ? oldHeaders.length : missionIndex)
-    .every((header, index, ratingHeaders) => {
+    .slice(basicHeaders.length, ratingRangeEnd)
+    .every((header) => {
       if (header === "") {
         return true;
       }
@@ -198,12 +202,7 @@ function collegeMigrateOrValidateHeaders(sheet, headers) {
         && knownRatingHeaders.has(header.slice(0, -" Comment".length));
     });
 
-  if (!hasBasicHeaders
-    || missionIndex < basicHeaders.length
-    || (managementCommentIndex >= 0 && managementCommentIndex !== missionIndex + 1)
-    || (managementCommentIndex < 0 && missionIndex !== oldHeaders.length - 1)
-    || (managementCommentIndex >= 0 && managementCommentIndex !== oldHeaders.length - 1)
-    || !ratingHeadersAreValid) {
+  if (!hasBasicHeaders || missionIndex < basicHeaders.length || !ratingHeadersAreValid) {
     throw new Error("The existing College Evaluation sheet has incompatible headers.");
   }
 
@@ -229,8 +228,9 @@ function collegeMigrateOrValidateHeaders(sheet, headers) {
       );
     });
     row.push(
-      oldRow[missionIndex],
-      managementCommentIndex === -1 ? "" : oldRow[managementCommentIndex]
+      objectiveIndex >= 0 ? oldRow[objectiveIndex] : "",
+      missionIndex >= 0 ? oldRow[missionIndex] : "",
+      managementCommentIndex >= 0 ? oldRow[managementCommentIndex] : ""
     );
     return row;
   });
@@ -244,8 +244,9 @@ function collegeValidateAnswers(answers) {
   if (!answers
     || !answers.ratings
     || !answers.comments
+    || typeof answers.missionObjective !== "string"
+    || !COLLEGE_VALID_MISSION_OBJECTIVES.includes(answers.missionObjective)
     || typeof answers.missionDescription !== "string"
-    || !answers.missionDescription.trim()
     || answers.missionDescription.length > 5000) {
     throw new Error("Invalid or incomplete College Evaluation answers.");
   }
@@ -277,10 +278,16 @@ function collegeValidateAnswers(answers) {
     comments[field.key] = comment.trim();
   });
 
+  const missionDescription = answers.missionDescription.trim();
+  if ((answers.missionObjective === "হ্যাঁ" || answers.missionObjective === "অন্যান্য") && !missionDescription) {
+    throw new Error("Please describe the mission or purpose when the response is yes or other.");
+  }
+
   return {
     ratings: ratings,
     comments: comments,
-    missionDescription: answers.missionDescription.trim(),
+    missionObjective: answers.missionObjective.trim(),
+    missionDescription: missionDescription,
     managementComment: collegeValidateOptionalText(
       answers.managementComment,
       "College Management Comment",

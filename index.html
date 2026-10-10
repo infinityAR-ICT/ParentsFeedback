@@ -165,14 +165,14 @@ const OPTION_EMOJIS = {
 };
 const COLLEGE_RATING_QUESTIONS = [
   {key: "environmentRating", text: "১. প্রত্যেকের ব্যক্তিগত উন্নয়নের জন্য কলেজের বর্তমান পরিবেশ কেমন?"},
-  {key: "educationDevelopmentRating", text: "৩. পড়াশোনা উন্নয়নের জন্য গৃহীত সার্বিক প্রদক্ষেপ কেমন?"},
-  {key: "houseEnvironmentRating", text: "৪. হাউজের বর্তমান পরিবেশ কেমন?"},
-  {key: "formMasterSincerityRating", text: "৫. ফর্ম মাস্টারের আন্তরিকতা কেমন?"},
-  {key: "houseMasterDedicationRating", text: "৬. হাউজ মাস্টারের নিবেদন ও আন্তরিকতা কেমন?"},
-  {key: "hospitalFacilitiesRating", text: "৭. হাসপাতাল ব্যবস্থাপনা ও পরিবেশ কেমন?"},
-  {key: "collegeAdjutantSincerityRating", text: "৮. অ্যাডজুট্যান্টের নিবেদন (Sincerity) কেমন?"},
-  {key: "vicePrincipalViewRating", text: "৯. উপাধ্যক্ষের নিবেদন (Sincerity) কেমন?"},
-  {key: "principalViewRating", text: "১০.অধ্যক্ষের নিবেদন (Sincerity) কেমন?"},
+  {key: "educationDevelopmentRating", text: "৪. পড়াশোনা উন্নয়নের জন্য গৃহীত সার্বিক প্রদক্ষেপ কেমন?"},
+  {key: "houseEnvironmentRating", text: "৫. হাউজের বর্তমান পরিবেশ কেমন?"},
+  {key: "formMasterSincerityRating", text: "৬. ফর্ম মাস্টারের আন্তরিকতা কেমন?"},
+  {key: "houseMasterDedicationRating", text: "৭. হাউজ মাস্টারের নিবেদন ও আন্তরিকতা কেমন?"},
+  {key: "hospitalFacilitiesRating", text: "৮. হাসপাতাল ব্যবস্থাপনা ও পরিবেশ কেমন?"},
+  {key: "collegeAdjutantSincerityRating", text: "৯. অ্যাডজুট্যান্টের নিবেদন (Sincerity) কেমন?"},
+  {key: "vicePrincipalViewRating", text: "১০. উপাধ্যক্ষের নিবেদন (Sincerity) কেমন?"},
+  {key: "principalViewRating", text: "১১.অধ্যক্ষের নিবেদন (Sincerity) কেমন?"},
 ];
 const EVALUATION_COPY = {
   college: {
@@ -184,8 +184,8 @@ const EVALUATION_COPY = {
     otherEvaluationLabel: "আরেকটি উত্তর শুরু করুন"
   }
 };
-const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhqSK9FQO5jswdDEzPWALfyenoHbrs0frTvj7pXrvnNRSw0F54EqZVLXCmFO9ZnMXljg/exec";
-const COLLEGE_GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyhqSK9FQO5jswdDEzPWALfyenoHbrs0frTvj7pXrvnNRSw0F54EqZVLXCmFO9ZnMXljg/exec";
+const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwZ0yqfM4W8UQpisQCyPZqllsC_DRHtCRdLoD3NLBlVL5fP5SjxdGmYUdUCj53QDVgYUw/exec";
+const COLLEGE_GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwZ0yqfM4W8UQpisQCyPZqllsC_DRHtCRdLoD3NLBlVL5fP5SjxdGmYUdUCj53QDVgYUw/exec";
 let submissionInProgress = false;
 
 function buildForm(){
@@ -250,13 +250,27 @@ function buildForm(){
     </div>`;
     if(question.key === "environmentRating"){
       html += `<div class="question">
-        <label class="qtext" for="collegeMissionDescription">২. বরিশাল ক্যাডেট কলেজ কি কোন সুনির্দিষ্ট লক্ষ্য/ উদ্দেশ্য অর্জনের দিকে ধাবিত হচ্ছে? আপনার দৃষ্টিতে সেই লক্ষ্য/ উদ্দেশ্য কি সেটি এক বা একাধিক বাক্যে বর্ণনা করুন।</label>
-        <textarea id="collegeMissionDescription" class="college-answer" maxlength="5000" placeholder="মতামত বাংলা/ইংরেজি/ ইংরেজি ফন্টে বাংলা(Amar=আমার) লেখা যাবে।" required></textarea>
+        <div class="qtext">২. বরিশাল ক্যাডেট কলেজের কি কোন সুনির্দিষ্ট লক্ষ্য/ উদ্দেশ্য আছে?</div>
+        <div class="options">
+          <label class="option">
+            <input type="radio" name="collegeMissionObjective" value="হ্যাঁ" required> ✅ হ্যাঁ
+          </label>
+          <label class="option">
+            <input type="radio" name="collegeMissionObjective" value="না"> ❌ না
+          </label>
+          <label class="option">
+            <input type="radio" name="collegeMissionObjective" value="অন্যান্য"> ℹ️ অন্যান্য
+          </label>
+        </div>
+      </div>`;
+      html += `<div class="question">
+        <label class="qtext" for="collegeMissionDescription">৩. বরিশাল ক্যাডেট কলেজ কি কোন সুনির্দিষ্ট লক্ষ্য/ উদ্দেশ্য অর্জনের দিকে ধাবিত হচ্ছে? আপনার দৃষ্টিতে সেই লক্ষ্য/ উদ্দেশ্য কি সেটি এক বা একাধিক বাক্যে বর্ণনা করুন।</label>
+        <textarea id="collegeMissionDescription" class="college-answer" maxlength="5000" placeholder="মতামত বাংলা/ইংরেজি/ ইংরেজি ফন্টে বাংলা(Amar=আমার) লেখা যাবে।"></textarea>
       </div>`;
     }
   });
   html += `<div class="question">
-    <label class="qtext" for="collegeManagementComment">১১. কলেজের সঠিক পরিচালনা ও পরিস্থিতির মানোন্নয়নে আপনার মতামত লিখুন।</label>
+    <label class="qtext" for="collegeManagementComment">১২. কলেজের সঠিক পরিচালনা ও পরিস্থিতির মানোন্নয়নে আপনার মতামত লিখুন।</label>
     <textarea id="collegeManagementComment" class="college-answer" maxlength="5000" placeholder="মতামত বাংলা/ইংরেজি/ ইংরেজি ফন্টে বাংলা(Amar=আমার) লেখা যাবে।"></textarea>
   </div>`;
   html += `</section>`;
@@ -319,6 +333,7 @@ async function saveToGoogleSheet(){
           question.key,
           document.getElementById(`college-${question.key}-comment`).value.trim()
         ])),
+        missionObjective: document.querySelector('input[name="collegeMissionObjective"]:checked')?.value || "",
         missionDescription: document.getElementById("collegeMissionDescription").value.trim(),
         managementComment: document.getElementById("collegeManagementComment").value.trim()
       }
@@ -446,6 +461,18 @@ function currentSectionComplete(){
     return false;
   }
 
+  const missionObjective = document.querySelector('input[name="collegeMissionObjective"]:checked');
+  if(!missionObjective){
+    alert("বরিশাল ক্যাডেট কলেজের লক্ষ্য/উদ্দেশ্য সম্পর্কে আপনার উত্তর নির্বাচন করুন।");
+    document.querySelector('input[name="collegeMissionObjective"]').focus();
+    return false;
+  }
+  const missionDescription = document.getElementById("collegeMissionDescription");
+  if((missionObjective.value === "হ্যাঁ" || missionObjective.value === "অন্যান্য") && !missionDescription.value.trim()){
+    alert("লক্ষ্য/উদ্দেশ্য সম্পর্কে বিস্তারিত লিখুন।");
+    missionDescription.focus();
+    return false;
+  }
   for(const question of COLLEGE_RATING_QUESTIONS){
     const rating = document.querySelector(`input[name="college-${question.key}"]:checked`);
     if(!rating){
@@ -459,12 +486,6 @@ function currentSectionComplete(){
       commentField.focus();
       return false;
     }
-  }
-  const missionDescription = document.getElementById("collegeMissionDescription");
-  if(!missionDescription.value.trim()){
-    alert("লক্ষ্য/উদ্দেশ্য সম্পর্কিত মন্তব্যের ঘর পূরণ করুন।");
-    missionDescription.focus();
-    return false;
   }
   return true;
 }
