@@ -9,7 +9,7 @@ const COLLEGE_VALID_HOUSES = [
   "Shariatullah House"
 ];
 const COLLEGE_VALID_FORMS = ["A", "B"];
-const COLLEGE_VALID_MISSION_OBJECTIVES = ["হ্যাঁ", "না", "অন্যান্য"];
+const COLLEGE_VALID_MISSION_OBJECTIVES = ["হ্যাঁ", "না", "নিশ্চিত নই"];
 const COLLEGE_RATING_FIELDS = [
   {key: "environmentRating", header: "College Environment Rating"},
   {key: "educationDevelopmentRating", header: "Education Development Measures Rating"},
@@ -279,8 +279,8 @@ function collegeValidateAnswers(answers) {
   });
 
   const missionDescription = answers.missionDescription.trim();
-  if ((answers.missionObjective === "হ্যাঁ" || answers.missionObjective === "অন্যান্য") && !missionDescription) {
-    throw new Error("Please describe the mission or purpose when the response is yes or other.");
+  if (answers.missionObjective === "হ্যাঁ" && !missionDescription) {
+    throw new Error("Please describe the mission or purpose when the response is yes.");
   }
 
   return {

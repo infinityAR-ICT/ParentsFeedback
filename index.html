@@ -184,8 +184,7 @@ const EVALUATION_COPY = {
     otherEvaluationLabel: "আরেকটি উত্তর শুরু করুন"
   }
 };
-const GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwZ0yqfM4W8UQpisQCyPZqllsC_DRHtCRdLoD3NLBlVL5fP5SjxdGmYUdUCj53QDVgYUw/exec";
-const COLLEGE_GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwZ0yqfM4W8UQpisQCyPZqllsC_DRHtCRdLoD3NLBlVL5fP5SjxdGmYUdUCj53QDVgYUw/exec";
+const COLLEGE_GOOGLE_SHEETS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzUL2rdJaN9op4hHi96isV2b88DOjXVVGbDzb4IClSsVWnqK2_E21Has2uRB4VH_drumg/exec";
 let submissionInProgress = false;
 
 function buildForm(){
@@ -468,7 +467,7 @@ function currentSectionComplete(){
     return false;
   }
   const missionDescription = document.getElementById("collegeMissionDescription");
-  if((missionObjective.value === "হ্যাঁ" || missionObjective.value === "অন্যান্য") && !missionDescription.value.trim()){
+  if(missionObjective.value === "হ্যাঁ" && !missionDescription.value.trim()){
     alert("লক্ষ্য/উদ্দেশ্য সম্পর্কে বিস্তারিত লিখুন।");
     missionDescription.focus();
     return false;
