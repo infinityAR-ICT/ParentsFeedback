@@ -24,7 +24,6 @@ const COLLEGE_RATING_FIELDS = [
   {key: "principalViewRating", header: "Your view about The Principal"}
 ];
 const COLLEGE_REQUIRED_RATING_KEYS = [
-  "environmentRating",
   "educationDevelopmentRating",
   "houseEnvironmentRating",
   "formMasterSincerityRating",
